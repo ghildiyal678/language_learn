@@ -1,0 +1,650 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--surface:#141720;--card:#1c2030;--border:#ffffff14;--border2:#ffffff22;
+  --blue:#4f8ef7;--gold:#e8c76a;--red:#e05a5a;--green:#52c97a;--purple:#a78bfa;
+  --text:#f0f2f8;--muted:#7a80a0;--subtle:#2a3050;
+}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:58px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:6px}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--text)}
+.logo em{color:var(--gold);font-style:italic}
+.flag{display:inline-flex;border-radius:3px;overflow:hidden;height:13px;margin-right:7px;vertical-align:middle}
+.flag span{display:block;width:7px;height:13px}
+.f-bl{background:#002395}.f-wh{background:#fff}.f-rd{background:#ED2939}
+.nav-links{display:flex;gap:2px;flex-wrap:wrap}
+.nav-btn{background:none;border:none;padding:5px 12px;border-radius:18px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s}
+.nav-btn:hover{color:var(--text);background:var(--surface)}
+.nav-btn.active{color:var(--text);background:var(--card);border:1px solid var(--border2)}
+
+.page{display:none;animation:fadeIn .3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero{padding:2.5rem 1.5rem 2rem;text-align:center;border-bottom:1px solid var(--border);background:var(--surface)}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:600;color:var(--gold);margin-bottom:1rem;letter-spacing:.8px;text-transform:uppercase}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-weight:600;line-height:1.15;margin-bottom:.75rem}
+.hero h1 em{color:var(--gold);font-style:italic}
+.hero p{font-size:14px;color:var(--muted);max-width:460px;margin:0 auto 1.5rem;line-height:1.7}
+.hero-cta{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn-p{background:var(--blue);color:#fff;border:none;padding:9px 22px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-p:hover{opacity:.85;transform:translateY(-1px)}
+.btn-o{background:none;color:var(--text);border:1px solid var(--border2);padding:9px 22px;border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+.hero-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;color:var(--gold)}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-top:2px}
+
+.section{padding:1.5rem}
+.section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;flex-wrap:wrap;gap:8px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600}
+.chip{font-size:11px;padding:3px 10px;border-radius:12px;background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
+
+/* LESSON CARDS */
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.l-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.l-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.l-card.locked{opacity:.4;cursor:default}
+.l-card.locked:hover{transform:none}
+.l-icon{font-size:1.3rem;margin-bottom:.5rem;display:block}
+.l-title{font-weight:600;font-size:13px;margin-bottom:2px}
+.l-sub{font-size:11px;color:var(--muted)}
+.l-badge{position:absolute;top:9px;right:9px;font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.ba1{background:#4f8ef720;color:var(--blue)}.bai{background:#e8c76a20;color:var(--gold)}.ba2{background:#a78bfa20;color:var(--purple)}
+.prog-bar{height:2px;background:var(--subtle);border-radius:2px;margin-top:10px}
+.prog-fill{height:100%;border-radius:2px;transition:width .4s}
+.pf-blue{background:var(--blue)}.pf-gold{background:var(--gold)}.pf-green{background:var(--green)}.pf-purple{background:var(--purple)}
+
+/* ALPHABET */
+.lang-toggle{display:flex;gap:6px;margin-bottom:1.25rem}
+.lt{border:1px solid var(--border);border-radius:8px;padding:6px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;background:var(--card);transition:all .2s}
+.lt.active{border-color:var(--blue);color:var(--blue);background:#4f8ef715}
+.alphabet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:2rem}
+.alpha-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;text-align:center;cursor:pointer;transition:all .25s;position:relative}
+.alpha-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.alpha-card.selected{border-color:var(--gold);background:#e8c76a08}
+.alpha-letter{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:600;color:var(--gold);line-height:1}
+.alpha-name{font-size:11px;color:var(--muted);margin-top:4px}
+.alpha-example{font-size:10px;color:var(--subtle);margin-top:2px}
+.alpha-sound{font-size:10px;background:var(--surface);border-radius:6px;padding:2px 6px;margin-top:5px;color:var(--blue);display:inline-block}
+
+/* DETAIL PANEL */
+.alpha-detail{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;display:none;animation:fadeIn .25s ease}
+.alpha-detail.show{display:block}
+.ad-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.ad-big{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:600;color:var(--gold);line-height:1;min-width:70px;text-align:center}
+.ad-info h2{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;margin-bottom:4px}
+.ad-info p{font-size:13px;color:var(--muted);line-height:1.6}
+.ad-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+.ad-row{background:var(--surface);border-radius:10px;padding:.7rem 1rem}
+.ad-row-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+.ad-row-val{font-size:14px;font-weight:500}
+.ad-words{margin-top:1rem}
+.ad-words-title{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
+.word-pills{display:flex;gap:6px;flex-wrap:wrap}
+.wpill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px}
+.wpill em{color:var(--gold);font-style:normal}
+
+/* VOCAB */
+.vocab-tabs{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.vtab{background:none;border:1px solid var(--border);border-radius:18px;padding:4px 13px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
+.vtab.active{border-color:var(--gold);color:var(--gold);background:#e8c76a10}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px}
+.vword{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;transition:border-color .2s;cursor:default}
+.vword:hover{border-color:var(--border2)}
+.vfr{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:2px}
+.ven{font-size:11px;color:var(--muted)}
+
+/* PHRASES */
+.phrase-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:9px}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;transition:all .2s;cursor:pointer}
+.pcard:hover{border-color:var(--border2);transform:translateY(-1px)}
+.pfr{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:var(--gold);margin-bottom:3px}
+.pen{font-size:12px;color:var(--muted)}
+.ptag{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--subtle);margin-top:7px}
+
+/* AI TUTOR */
+.ai-box{max-width:660px;margin:0 auto}
+.ai-mode-bar{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.mode-btn{border:1px solid var(--border);background:var(--card);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s}
+.mode-btn.active{border-color:var(--blue);color:var(--blue);background:#4f8ef710}
+.ai-chat{background:var(--card);border:1px solid var(--border);border-radius:14px;min-height:300px;max-height:400px;overflow-y:auto;padding:1.1rem;display:flex;flex-direction:column;gap:10px;margin-bottom:10px}
+.msg{max-width:85%;padding:.65rem .95rem;border-radius:12px;font-size:13px;line-height:1.65;animation:fadeIn .22s ease}
+.msg.user{align-self:flex-end;background:var(--blue);color:#fff;border-radius:12px 12px 2px 12px}
+.msg.ai{align-self:flex-start;background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:12px 12px 12px 2px}
+.ai-label{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--gold);margin-bottom:3px;font-weight:700}
+.typing{display:flex;gap:4px;align-items:center;padding:.4rem}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--muted);animation:pulse 1.2s ease infinite}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.ai-input-row{display:flex;gap:7px}
+.ai-input{flex:1;background:var(--card);border:1px solid var(--border2);border-radius:9px;padding:9px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s}
+.ai-input:focus{border-color:var(--blue)}
+.ai-send{background:var(--blue);border:none;border-radius:9px;padding:9px 16px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:opacity .2s}
+.ai-send:hover{opacity:.85}
+.ai-send:disabled{opacity:.4;cursor:default}
+.quick-prompts{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}
+.qp{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:3px 11px;font-size:11px;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Outfit',sans-serif}
+.qp:hover{border-color:var(--blue);color:var(--blue)}
+
+/* QUIZ */
+.quiz-wrap{max-width:540px;margin:0 auto}
+.ai-quiz-toggle{display:flex;gap:6px;margin-bottom:1.1rem}
+.aqt{border:1px solid var(--border);border-radius:8px;padding:6px 13px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;background:var(--card);transition:all .2s}
+.aqt.active{border-color:var(--gold);color:var(--gold);background:#e8c76a10}
+.quiz-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem}
+.quiz-prog-txt{font-size:12px;color:var(--muted)}
+.score-badge{font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600;background:#52c97a20;color:var(--green)}
+.qpb{height:3px;background:var(--subtle);border-radius:2px;margin-bottom:1.25rem}
+.qpf{height:100%;border-radius:2px;background:var(--blue);transition:width .4s}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.q-type{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);font-weight:700;margin-bottom:.4rem}
+.q-text{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;line-height:1.4;color:var(--text);margin-bottom:.35rem}
+.q-hint{font-size:12px;color:var(--muted);margin-bottom:1.25rem}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:1.1rem}
+.opt{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:.75rem;font-size:13px;font-family:'Outfit',sans-serif;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;font-weight:400}
+.opt:hover{border-color:var(--border2);background:var(--card)}
+.opt.correct{border-color:var(--green)!important;background:#52c97a15!important;color:var(--green)!important}
+.opt.wrong{border-color:var(--red)!important;background:#e05a5a15!important;color:var(--red)!important}
+.opt.disabled{cursor:default;pointer-events:none}
+.feedback{font-size:13px;padding:9px 13px;border-radius:9px;margin-bottom:1.1rem;display:none}
+.feedback.show{display:block}
+.feedback.correct{background:#52c97a15;border:1px solid #52c97a40;color:var(--green)}
+.feedback.wrong{background:#e05a5a15;border:1px solid #e05a5a40;color:var(--red)}
+.next-btn{width:100%;padding:.8rem;border-radius:9px;background:var(--blue);color:#fff;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;display:none;transition:opacity .2s}
+.next-btn:hover{opacity:.85}
+.next-btn.show{display:block}
+.gen-btn{display:flex;align-items:center;gap:6px;background:#e8c76a12;border:1px solid #e8c76a50;border-radius:8px;padding:7px 14px;font-size:13px;color:var(--gold);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;font-weight:500;margin-bottom:.9rem}
+.gen-btn:hover{background:#e8c76a20}
+.gen-btn:disabled{opacity:.4;cursor:default}
+.spinner{width:13px;height:13px;border:2px solid #e8c76a40;border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rbox{text-align:center;padding:1.5rem .5rem}
+.rscore{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:600;color:var(--gold)}
+.rlabel{font-size:12px;color:var(--muted);margin-bottom:.7rem}
+.rmsg{font-size:14px;color:var(--text);margin-bottom:1.25rem}
+.rbtn{background:var(--blue);color:#fff;border:none;padding:.75rem 1.75rem;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <span class="flag"><span class="f-bl"></span><span class="f-wh"></span><span class="f-rd"></span></span>
+    <em>Parle</em>Bien
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="go('home')">Home</button>
+    <button class="nav-btn" onclick="go('alphabet')">Alphabet</button>
+    <button class="nav-btn" onclick="go('vocab')">Vocabulary</button>
+    <button class="nav-btn" onclick="go('phrases')">Phrases</button>
+    <button class="nav-btn" onclick="go('tutor')">AI Tutor</button>
+    <button class="nav-btn" onclick="go('quiz')">Quiz</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-badge">✦ Powered by Claude AI</div>
+    <h1>Learn <em>French</em> from<br>the very beginning</h1>
+    <p>Start with the alphabet, build vocabulary, practice phrases — then let the AI tutor guide you further.</p>
+    <div class="hero-cta">
+      <button class="btn-p" onclick="go('alphabet')">Start with Alphabet →</button>
+      <button class="btn-o" onclick="go('tutor')">Talk to AI Tutor</button>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-val">26</div><div class="stat-lbl">Letters</div></div>
+      <div><div class="stat-val">50+</div><div class="stat-lbl">Vocab words</div></div>
+      <div><div class="stat-val">20+</div><div class="stat-lbl">Phrases</div></div>
+      <div><div class="stat-val">AI</div><div class="stat-lbl">Tutor & Quiz</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-hd"><div class="section-title">Your curriculum</div></div>
+    <div class="lesson-grid">
+      <div class="l-card" onclick="go('alphabet')" style="border-color:#e8c76a30">
+        <span class="l-icon">🔡</span>
+        <div class="l-badge ba1">A1</div>
+        <div class="l-title">Alphabet</div>
+        <div class="l-sub">A–Z in French & English</div>
+        <div class="prog-bar"><div class="prog-fill pf-gold" style="width:80%"></div></div>
+      </div>
+      <div class="l-card" onclick="go('vocab')">
+        <span class="l-icon">🔤</span>
+        <div class="l-badge ba1">A1</div>
+        <div class="l-title">Vocabulary</div>
+        <div class="l-sub">50+ core words</div>
+        <div class="prog-bar"><div class="prog-fill pf-blue" style="width:55%"></div></div>
+      </div>
+      <div class="l-card" onclick="go('phrases')">
+        <span class="l-icon">💬</span>
+        <div class="l-badge ba1">A1</div>
+        <div class="l-title">Phrases</div>
+        <div class="l-sub">Everyday expressions</div>
+        <div class="prog-bar"><div class="prog-fill pf-green" style="width:35%"></div></div>
+      </div>
+      <div class="l-card" onclick="go('tutor')">
+        <span class="l-icon">🤖</span>
+        <div class="l-badge bai">AI</div>
+        <div class="l-title">AI Tutor</div>
+        <div class="l-sub">Chat & practice</div>
+        <div class="prog-bar"><div class="prog-fill pf-purple" style="width:20%"></div></div>
+      </div>
+      <div class="l-card" onclick="go('quiz')">
+        <span class="l-icon">🧩</span>
+        <div class="l-badge bai">AI</div>
+        <div class="l-title">AI Quiz</div>
+        <div class="l-sub">Test your knowledge</div>
+        <div class="prog-bar"><div class="prog-fill pf-blue" style="width:10%"></div></div>
+      </div>
+      <div class="l-card locked">
+        <span class="l-icon">🔒</span>
+        <div class="l-badge ba2">A2</div>
+        <div class="l-title">Conjugation</div>
+        <div class="l-sub">Verb tenses</div>
+        <div class="prog-bar"><div class="prog-fill pf-blue" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ALPHABET -->
+<div class="page" id="page-alphabet">
+  <div class="section">
+    <div class="section-hd">
+      <div class="section-title">The Alphabet</div>
+      <span class="chip" id="alpha-count">26 letters</span>
+    </div>
+    <div class="lang-toggle">
+      <button class="lt active" id="ltEN" onclick="setAlphaLang('en')">🇬🇧 English</button>
+      <button class="lt" id="ltFR" onclick="setAlphaLang('fr')">🇫🇷 French</button>
+      <button class="lt" id="ltBoth" onclick="setAlphaLang('both')">⚡ Both side by side</button>
+    </div>
+    <div class="alpha-detail" id="alphaDetail"></div>
+    <div class="alphabet-grid" id="alphaGrid"></div>
+  </div>
+</div>
+
+<!-- VOCAB -->
+<div class="page" id="page-vocab">
+  <div class="section">
+    <div class="section-hd"><div class="section-title">Vocabulary</div><span class="chip">English ↔ French</span></div>
+    <div class="vocab-tabs" id="vtabs"></div>
+    <div class="vocab-grid" id="vgrid"></div>
+  </div>
+</div>
+
+<!-- PHRASES -->
+<div class="page" id="page-phrases">
+  <div class="section">
+    <div class="section-hd"><div class="section-title">Essential Phrases</div><span class="chip">20 phrases</span></div>
+    <div class="phrase-grid" id="pgrid"></div>
+  </div>
+</div>
+
+<!-- AI TUTOR -->
+<div class="page" id="page-tutor">
+  <div class="section">
+    <div class="section-hd"><div class="section-title">AI Tutor</div><span class="chip">Claude-powered</span></div>
+    <div class="ai-box">
+      <div class="ai-mode-bar">
+        <button class="mode-btn active" id="modeExplain" onclick="setMode('explain')">📖 Grammar</button>
+        <button class="mode-btn" id="modePractice" onclick="setMode('practice')">🗣️ Conversation</button>
+        <button class="mode-btn" id="modeAlpha" onclick="setMode('alpha')">🔡 Alphabet help</button>
+        <button class="mode-btn" id="modeTranslate" onclick="setMode('translate')">🔄 Translate</button>
+        <button class="mode-btn" id="modeTips" onclick="setMode('tips')">💡 Tips</button>
+      </div>
+      <div class="quick-prompts" id="qprompts"></div>
+      <div class="ai-chat" id="chat"></div>
+      <div class="ai-input-row">
+        <input class="ai-input" id="aiInput" placeholder="Ask anything about French..." onkeydown="if(event.key==='Enter')sendMsg()">
+        <button class="ai-send" id="aiSend" onclick="sendMsg()">Send →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="page" id="page-quiz">
+  <div class="section">
+    <div class="section-hd"><div class="section-title">Quiz</div><span class="chip">AI-powered</span></div>
+    <div class="quiz-wrap">
+      <div class="ai-quiz-toggle">
+        <button class="aqt active" id="tStatic" onclick="switchQuizMode('static')">📋 Standard</button>
+        <button class="aqt" id="tAlpha" onclick="switchQuizMode('alpha')">🔡 Alphabet quiz</button>
+        <button class="aqt" id="tAI" onclick="switchQuizMode('ai')">✨ AI quiz</button>
+      </div>
+      <div id="quiz-area"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── ALPHABET DATA ──
+const alphabet = [
+  {l:"A",nameFR:"ah",nameEN:"ay",soundFR:"Like 'a' in 'father'",soundEN:"Like 'a' in 'age'",wordsFR:["Arbre (tree)","Ami (friend)","Amour (love)"],wordsEN:["Apple","Ant","Air"]},
+  {l:"B",nameFR:"bé",nameEN:"bee",soundFR:"Same as English B",soundEN:"Like 'b' in 'book'",wordsFR:["Bonjour (hello)","Bleu (blue)","Beau (beautiful)"],wordsEN:["Ball","Book","Bird"]},
+  {l:"C",nameFR:"sé",nameEN:"see",soundFR:"'s' before e/i, 'k' otherwise",soundEN:"Like 'k' in 'cat'",wordsFR:["Café (coffee)","Chien (dog)","Chat (cat)"],wordsEN:["Cat","Car","Cup"]},
+  {l:"D",nameFR:"dé",nameEN:"dee",soundFR:"Softer than English D",soundEN:"Like 'd' in 'dog'",wordsFR:["Dix (ten)","Dimanche (Sunday)","Deux (two)"],wordsEN:["Dog","Door","Day"]},
+  {l:"E",nameFR:"euh",nameEN:"ee",soundFR:"Many sounds: 'ay', 'eh', silent",soundEN:"Like 'e' in 'me'",wordsFR:["Eau (water)","École (school)","Été (summer)"],wordsEN:["Egg","Ear","Eye"]},
+  {l:"F",nameFR:"eff",nameEN:"ef",soundFR:"Same as English F",soundEN:"Like 'f' in 'fish'",wordsFR:["Fille (girl)","Fleur (flower)","Fromage (cheese)"],wordsEN:["Fish","Fox","Fly"]},
+  {l:"G",nameFR:"jé",nameEN:"jee",soundFR:"'zh' before e/i, hard 'g' otherwise",soundEN:"Like 'g' in 'go'",wordsFR:["Garçon (boy)","Gâteau (cake)","Grand (big)"],wordsEN:["Goat","Gold","Game"]},
+  {l:"H",nameFR:"ash",nameEN:"aych",soundFR:"Always silent in French!",soundEN:"Like 'h' in 'hat'",wordsFR:["Heure (hour)","Homme (man)","Hôtel (hotel)"],wordsEN:["Hat","House","Hand"]},
+  {l:"I",nameFR:"ee",nameEN:"eye",soundFR:"Like 'ee' in 'see'",soundEN:"Like 'i' in 'ice'",wordsFR:["Île (island)","Ici (here)","Indien (Indian)"],wordsEN:["Ice","Ink","Iron"]},
+  {l:"J",nameFR:"ji",nameEN:"jay",soundFR:"Like 's' in 'measure' — soft zh",soundEN:"Like 'j' in 'jump'",wordsFR:["Jardin (garden)","Jour (day)","Jeudi (Thursday)"],wordsEN:["Jar","Jump","Jet"]},
+  {l:"K",nameFR:"ka",nameEN:"kay",soundFR:"Rare in French, same sound as English",soundEN:"Like 'k' in 'kite'",wordsFR:["Kilo","Kangourou (kangaroo)","Karaté"],wordsEN:["Kite","King","Key"]},
+  {l:"L",nameFR:"el",nameEN:"el",soundFR:"Clearer than English L",soundEN:"Like 'l' in 'lamp'",wordsFR:["Lune (moon)","Livre (book)","Lait (milk)"],wordsEN:["Lamp","Lion","Leaf"]},
+  {l:"M",nameFR:"em",nameEN:"em",soundFR:"Same as English M",soundEN:"Like 'm' in 'moon'",wordsFR:["Maison (house)","Mer (sea)","Mardi (Tuesday)"],wordsEN:["Moon","Map","Mouse"]},
+  {l:"N",nameFR:"en",nameEN:"en",soundFR:"Same as English N",soundEN:"Like 'n' in 'name'",wordsFR:["Nuit (night)","Non (no)","Neuf (nine)"],wordsEN:["Name","Nose","Net"]},
+  {l:"O",nameFR:"oh",nameEN:"oh",soundFR:"Rounder than English O",soundEN:"Like 'o' in 'open'",wordsFR:["Orange","Oiseau (bird)","Or (gold)"],wordsEN:["Orange","Ocean","Oak"]},
+  {l:"P",nameFR:"pé",nameEN:"pee",soundFR:"Less puff of air than English P",soundEN:"Like 'p' in 'pen'",wordsFR:["Pain (bread)","Père (father)","Paris"],wordsEN:["Pen","Pig","Park"]},
+  {l:"Q",nameFR:"ku",nameEN:"cue",soundFR:"Always followed by 'u', sounds like 'k'",soundEN:"Like 'qu' in 'queen'",wordsFR:["Quatre (four)","Qui (who)","Queue (tail)"],wordsEN:["Queen","Quick","Quiet"]},
+  {l:"R",nameFR:"air",nameEN:"ar",soundFR:"Guttural — from the back of the throat!",soundEN:"Like 'r' in 'run'",wordsFR:["Rouge (red)","Rose (pink)","Rue (street)"],wordsEN:["Rain","Road","Ring"]},
+  {l:"S",nameFR:"ess",nameEN:"es",soundFR:"'s' alone, 'z' between vowels",soundEN:"Like 's' in 'sun'",wordsFR:["Soleil (sun)","Sept (seven)","Samedi (Saturday)"],wordsEN:["Sun","Star","Sea"]},
+  {l:"T",nameFR:"té",nameEN:"tee",soundFR:"Less puff of air than English T",soundEN:"Like 't' in 'top'",wordsFR:["Table","Trois (three)","Terre (earth)"],wordsEN:["Tree","Top","Train"]},
+  {l:"U",nameFR:"ü",nameEN:"you",soundFR:"Round your lips as if to say 'oo' but say 'ee'",soundEN:"Like 'u' in 'use'",wordsFR:["Un (one)","Université","Unique"],wordsEN:["Umbrella","Up","Use"]},
+  {l:"V",nameFR:"vé",nameEN:"vee",soundFR:"Same as English V",soundEN:"Like 'v' in 'van'",wordsFR:["Vert (green)","Ville (city)","Vendredi (Friday)"],wordsEN:["Van","Vine","Voice"]},
+  {l:"W",nameFR:"double vé",nameEN:"double-you",soundFR:"Rare in French, usually in foreign words",soundEN:"Like 'w' in 'win'",wordsFR:["Week-end","Wagon","Wi-fi"],wordsEN:["Water","Wind","Wolf"]},
+  {l:"X",nameFR:"iks",nameEN:"ex",soundFR:"'gz' or 'ks' — context-dependent",soundEN:"Like 'x' in 'fox'",wordsFR:["Xylophone","Taxi","Luxe (luxury)"],wordsEN:["Fox","Box","Mix"]},
+  {l:"Y",nameFR:"i grec",nameEN:"why",soundFR:"Like English 'y' in yes",soundEN:"Like 'y' in 'yes'",wordsFR:["Yaourt (yogurt)","Yeux (eyes)","Yoga"],wordsEN:["Yarn","Year","Yak"]},
+  {l:"Z",nameFR:"zed",nameEN:"zee",soundFR:"Same as English Z",soundEN:"Like 'z' in 'zoo'",wordsFR:["Zéro (zero)","Zoo","Zone"],wordsEN:["Zoo","Zip","Zone"]},
+];
+
+// ── VOCAB ──
+const vocab = {
+  Greetings:[{fr:"Bonjour",en:"Hello"},{fr:"Bonsoir",en:"Good evening"},{fr:"Salut",en:"Hi"},{fr:"Au revoir",en:"Goodbye"},{fr:"Merci",en:"Thank you"},{fr:"S'il vous plaît",en:"Please"},{fr:"Oui",en:"Yes"},{fr:"Non",en:"No"}],
+  Numbers:[{fr:"Un",en:"One"},{fr:"Deux",en:"Two"},{fr:"Trois",en:"Three"},{fr:"Quatre",en:"Four"},{fr:"Cinq",en:"Five"},{fr:"Six",en:"Six"},{fr:"Sept",en:"Seven"},{fr:"Huit",en:"Eight"},{fr:"Neuf",en:"Nine"},{fr:"Dix",en:"Ten"}],
+  Colors:[{fr:"Rouge",en:"Red"},{fr:"Bleu",en:"Blue"},{fr:"Vert",en:"Green"},{fr:"Jaune",en:"Yellow"},{fr:"Blanc",en:"White"},{fr:"Noir",en:"Black"},{fr:"Rose",en:"Pink"},{fr:"Orange",en:"Orange"}],
+  Days:[{fr:"Lundi",en:"Monday"},{fr:"Mardi",en:"Tuesday"},{fr:"Mercredi",en:"Wednesday"},{fr:"Jeudi",en:"Thursday"},{fr:"Vendredi",en:"Friday"},{fr:"Samedi",en:"Saturday"},{fr:"Dimanche",en:"Sunday"}],
+  Food:[{fr:"Le pain",en:"Bread"},{fr:"Le fromage",en:"Cheese"},{fr:"L'eau",en:"Water"},{fr:"Le café",en:"Coffee"},{fr:"Le vin",en:"Wine"},{fr:"La viande",en:"Meat"},{fr:"Le beurre",en:"Butter"},{fr:"Le dessert",en:"Dessert"}],
+  Family:[{fr:"La mère",en:"Mother"},{fr:"Le père",en:"Father"},{fr:"Le frère",en:"Brother"},{fr:"La sœur",en:"Sister"},{fr:"Le fils",en:"Son"},{fr:"La fille",en:"Daughter"},{fr:"Le mari",en:"Husband"},{fr:"La femme",en:"Wife"}],
+};
+
+// ── PHRASES ──
+const phrasesData = [
+  {fr:"Comment vous appelez-vous ?",en:"What is your name?",cat:"Introductions"},
+  {fr:"Je m'appelle…",en:"My name is…",cat:"Introductions"},
+  {fr:"Enchanté(e)",en:"Nice to meet you",cat:"Introductions"},
+  {fr:"Comment allez-vous ?",en:"How are you?",cat:"Greetings"},
+  {fr:"Très bien, merci",en:"Very well, thank you",cat:"Responses"},
+  {fr:"Parlez-vous anglais ?",en:"Do you speak English?",cat:"Language"},
+  {fr:"Je ne comprends pas",en:"I don't understand",cat:"Language"},
+  {fr:"Pouvez-vous répéter ?",en:"Can you repeat that?",cat:"Language"},
+  {fr:"Où est la gare ?",en:"Where is the train station?",cat:"Navigation"},
+  {fr:"Combien ça coûte ?",en:"How much does it cost?",cat:"Shopping"},
+  {fr:"Je voudrais…",en:"I would like…",cat:"Restaurant"},
+  {fr:"L'addition, s'il vous plaît",en:"The bill, please",cat:"Restaurant"},
+  {fr:"C'est délicieux !",en:"It's delicious!",cat:"Restaurant"},
+  {fr:"Bonne chance !",en:"Good luck!",cat:"Expressions"},
+  {fr:"Félicitations !",en:"Congratulations!",cat:"Expressions"},
+  {fr:"Quelle heure est-il ?",en:"What time is it?",cat:"Time"},
+  {fr:"Je suis perdu(e)",en:"I'm lost",cat:"Navigation"},
+  {fr:"J'ai besoin d'aide",en:"I need help",cat:"Emergency"},
+  {fr:"À bientôt !",en:"See you soon!",cat:"Goodbyes"},
+  {fr:"Bonne nuit",en:"Good night",cat:"Goodbyes"},
+];
+
+// ── STATIC QUIZ ──
+const staticQuiz = [
+  {type:"Alphabet",q:"What is the French name for the letter 'H'?",hint:"Remember: H is always silent in French",opts:["hé","ash","aych","ha"],ans:1},
+  {type:"Alphabet",q:"Which letter is called « i grec » in French?",hint:"It's the 25th letter",opts:["I","W","Y","V"],ans:2},
+  {type:"Alphabet",q:"The French letter 'R' is pronounced:",hint:"It comes from deep in the throat",opts:["Like English R","Guttural, from the back of the throat","Like English L","Silent"],ans:1},
+  {type:"Alphabet",q:"In French, how is the letter 'U' called?",hint:"It has a unique lip-rounding sound",opts:["oo","ü","you","ah"],ans:1},
+  {type:"Translation",q:"What does « Bonjour » mean?",hint:"The most common French greeting",opts:["Goodbye","Good evening","Hello / Good day","Good night"],ans:2},
+  {type:"Vocabulary",q:"Which word means « bread » in French?",hint:"A staple at every French meal",opts:["Le lait","Le pain","Le beurre","La viande"],ans:1},
+  {type:"Alphabet",q:"The letter 'W' is called « double ___ » in French:",hint:"Think of the French word for V",opts:["double-you","double vé","double vu","double vi"],ans:1},
+  {type:"Translation",q:"How do you say « Thank you » in French?",hint:"A short word ending in 'i'",opts:["S'il vous plaît","Pardon","Bienvenue","Merci"],ans:3},
+  {type:"Alphabet",q:"Which letter is ALWAYS silent in French?",hint:"It appears in 'heure' and 'homme'",opts:["W","K","H","Y"],ans:2},
+  {type:"Vocabulary",q:"What color is « rouge »?",hint:"Think of the French flag",opts:["Blue","Green","White","Red"],ans:3},
+];
+
+const alphaQuiz = [
+  {type:"Alphabet",q:"How is the letter 'A' pronounced in French?",hint:"Like the 'a' in 'father'",opts:["ay","ah","ee","oh"],ans:1},
+  {type:"Alphabet",q:"What is the French name for letter 'E'?",hint:"It has many sounds in French",opts:["ay","ee","euh","eh"],ans:2},
+  {type:"Alphabet",q:"The letter 'C' in French sounds like 's' when followed by:",hint:"Think of the word 'café'",opts:["a, o, u","e, i","b, d","r, l"],ans:1},
+  {type:"Alphabet",q:"Which letter is called « eff » in French?",hint:"It makes the same sound as in English",opts:["V","E","F","P"],ans:2},
+  {type:"Alphabet",q:"The letter 'J' in French sounds like:",hint:"The 's' in 'measure' — a soft zh sound",opts:["English J","Hard G","Soft zh","English Y"],ans:2},
+  {type:"Alphabet",q:"What is the French name for letter 'G'?",hint:"It sounds similar to the English letter J",opts:["gé","jé","gy","gu"],ans:1},
+  {type:"Alphabet",q:"In French, 'S' between two vowels sounds like:",hint:"Like the 'z' in 'zoo'",opts:["s","z","sh","silent"],ans:1},
+  {type:"Alphabet",q:"The letter 'Q' in French is always followed by:",hint:"Think of 'quatre' or 'qui'",opts:["e","a","u","o"],ans:2},
+  {type:"Alphabet",q:"Which French letter name is « ka »?",hint:"It's rare in French words",opts:["C","K","Q","G"],ans:1},
+  {type:"Alphabet",q:"The letter 'Y' is called « i ___ » in French:",hint:"It's named after a country",opts:["i grec","i grand","i gris","i géant"],ans:0},
+];
+
+// ── NAV ──
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const map={home:0,alphabet:1,vocab:2,phrases:3,tutor:4,quiz:5};
+  document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  if(id==='alphabet')buildAlphabet();
+  if(id==='vocab')buildVocab();
+  if(id==='phrases')buildPhrases();
+  if(id==='quiz')initQuiz();
+  if(id==='tutor')initTutor();
+}
+
+// ── ALPHABET ──
+let alphaLang='en', selectedLetter=null;
+function setAlphaLang(l){
+  alphaLang=l;
+  ['EN','FR','Both'].forEach(x=>document.getElementById('lt'+x).classList.remove('active'));
+  document.getElementById('lt'+l.charAt(0).toUpperCase()+l.slice(1)).classList.add('active');
+  selectedLetter=null;
+  document.getElementById('alphaDetail').classList.remove('show');
+  buildAlphabet();
+}
+function buildAlphabet(){
+  const grid=document.getElementById('alphaGrid');
+  if(alphaLang==='both'){
+    grid.style.gridTemplateColumns='repeat(auto-fill,minmax(200px,1fr))';
+    grid.innerHTML=alphabet.map((a,i)=>`
+      <div class="alpha-card" onclick="selectLetter(${i})" id="ac${i}">
+        <div style="display:flex;gap:1rem;align-items:center;justify-content:center">
+          <div>
+            <div class="alpha-letter">${a.l}</div>
+            <div class="alpha-name" style="color:var(--blue)">EN: ${a.nameEN}</div>
+          </div>
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+          <div>
+            <div class="alpha-letter">${a.l}</div>
+            <div class="alpha-name" style="color:var(--gold)">FR: ${a.nameFR}</div>
+          </div>
+        </div>
+        <div class="alpha-example">${a.wordsEN[0]} / ${a.wordsFR[0]}</div>
+      </div>`).join('');
+  } else {
+    grid.style.gridTemplateColumns='repeat(auto-fill,minmax(120px,1fr))';
+    grid.innerHTML=alphabet.map((a,i)=>`
+      <div class="alpha-card" onclick="selectLetter(${i})" id="ac${i}">
+        <div class="alpha-letter">${a.l}</div>
+        <div class="alpha-name">${alphaLang==='fr'?a.nameFR:a.nameEN}</div>
+        <div class="alpha-example">${alphaLang==='fr'?a.wordsFR[0]:a.wordsEN[0]}</div>
+        <div class="alpha-sound">${alphaLang==='fr'?'FR':'EN'} /${alphaLang==='fr'?a.nameFR:a.nameEN}/</div>
+      </div>`).join('');
+  }
+}
+function selectLetter(i){
+  document.querySelectorAll('.alpha-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('ac'+i).classList.add('selected');
+  selectedLetter=i;
+  const a=alphabet[i];
+  const det=document.getElementById('alphaDetail');
+  det.classList.add('show');
+  det.innerHTML=`
+    <div class="ad-header">
+      <div class="ad-big">${a.l}</div>
+      <div class="ad-info">
+        <h2>Letter "${a.l}" — Beginner Guide</h2>
+        <p>Click any letter card to explore its sounds and example words in both languages.</p>
+      </div>
+    </div>
+    <div class="ad-rows">
+      <div class="ad-row">
+        <div class="ad-row-lbl">🇬🇧 English name</div>
+        <div class="ad-row-val" style="color:var(--blue)">${a.nameEN}</div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-row-lbl">🇫🇷 French name</div>
+        <div class="ad-row-val" style="color:var(--gold)">${a.nameFR}</div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-row-lbl">🇬🇧 English sound</div>
+        <div class="ad-row-val">${a.soundEN}</div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-row-lbl">🇫🇷 French sound</div>
+        <div class="ad-row-val">${a.soundFR}</div>
+      </div>
+    </div>
+    <div class="ad-words">
+      <div class="ad-words-title">🇬🇧 English example words</div>
+      <div class="word-pills">${a.wordsEN.map(w=>`<span class="wpill">${w}</span>`).join('')}</div>
+    </div>
+    <div class="ad-words" style="margin-top:.75rem">
+      <div class="ad-words-title">🇫🇷 French example words</div>
+      <div class="word-pills">${a.wordsFR.map(w=>`<span class="wpill"><em>${w}</em></span>`).join('')}</div>
+    </div>`;
+  det.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+// ── VOCAB ──
+let activeVCat='Greetings';
+function buildVocab(){
+  const cats=Object.keys(vocab);
+  document.getElementById('vtabs').innerHTML=cats.map(c=>`<button class="vtab ${c===activeVCat?'active':''}" onclick="setVCat('${c}')">${c}</button>`).join('');
+  document.getElementById('vgrid').innerHTML=vocab[activeVCat].map(w=>`<div class="vword"><div class="vfr">${w.fr}</div><div class="ven">${w.en}</div></div>`).join('');
+}
+function setVCat(c){activeVCat=c;buildVocab();}
+
+// ── PHRASES ──
+function buildPhrases(){
+  document.getElementById('pgrid').innerHTML=phrasesData.map(p=>`
+    <div class="pcard"><div class="pfr">${p.fr}</div><div class="pen">${p.en}</div><div class="ptag">${p.cat}</div></div>`).join('');
+}
+
+// ── AI TUTOR ──
+let tutorMode='explain';
+let chatHistory=[];
+const modePrompts={
+  explain:{system:"You are an expert French language tutor. Explain grammar clearly in both English and French with examples in both languages.",quick:["Explain 'le' vs 'la'","How do conjugate être?","What is the subjunctive?","Explain gender rules"]},
+  practice:{system:"You are a friendly French conversation partner. Show French phrases with English translations in parentheses. Correct mistakes gently. Keep responses short.",quick:["Bonjour, comment ça va?","Talk about the weather","Order food at a café","Introduce yourself in French"]},
+  alpha:{system:"You are a French alphabet specialist for beginners. Explain French letter sounds, compare them to English, give pronunciation tips, and show example words for each letter in both French and English. Be encouraging and clear.",quick:["How do I pronounce the French R?","What letters are silent in French?","Explain accent marks in French","How is U different from English?"]},
+  translate:{system:"You are a French-English translator. Translate text, provide phonetic pronunciation for French, and give brief usage notes. Format: Original → Translation → Pronunciation.",quick:["Translate: Where is the museum?","Translate: I love French food","Translate: Bonjour, je m'appelle Marie","Translate: Can you help me?"]},
+  tips:{system:"You are a French learning coach for absolute beginners. Give practical, encouraging advice about learning French. Use both English and French examples. Keep tips actionable.",quick:["How to remember gender?","Best daily practice tips","Common beginner mistakes","Tips for the French R sound"]},
+};
+function setMode(m){
+  tutorMode=m;
+  ['Explain','Practice','Alpha','Translate','Tips'].forEach(x=>{const el=document.getElementById('mode'+x);if(el)el.classList.remove('active');});
+  document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
+  buildQuickPrompts();
+}
+function buildQuickPrompts(){
+  document.getElementById('qprompts').innerHTML=modePrompts[tutorMode].quick.map(q=>`<button class="qp" onclick="quickSend('${q.replace(/'/g,"\\'")}')"> ${q}</button>`).join('');
+}
+function quickSend(text){document.getElementById('aiInput').value=text;sendMsg();}
+function initTutor(){
+  if(chatHistory.length===0){
+    chatHistory=[];
+    addAIMsg("Bonjour! 👋 I'm your AI French tutor. I can help with the alphabet, grammar, conversation, translation, or learning tips.\n\nTry the « Alphabet help » mode to learn French letter sounds, or ask me anything!");
+  }
+  buildQuickPrompts();
+}
+function addUserMsg(text){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg user';d.textContent=text;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function addAIMsg(text){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg ai';d.innerHTML=`<div class="ai-label">✦ AI Tutor</div>${text.replace(/\n/g,'<br>')}`;c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function showTyping(){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg ai';d.id='typing-ind';d.innerHTML='<div class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function hideTyping(){const t=document.getElementById('typing-ind');if(t)t.remove();}
+async function sendMsg(){
+  const inp=document.getElementById('aiInput');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';addUserMsg(text);chatHistory.push({role:'user',content:text});
+  document.getElementById('aiSend').disabled=true;showTyping();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:modePrompts[tutorMode].system,messages:chatHistory})});
+    const data=await res.json();
+    const reply=data.content.map(c=>c.text||'').join('');
+    chatHistory.push({role:'assistant',content:reply});
+    hideTyping();addAIMsg(reply);
+  }catch(e){hideTyping();addAIMsg("Something went wrong. Please try again.");}
+  document.getElementById('aiSend').disabled=false;
+}
+
+// ── QUIZ ──
+let qi=0,score=0,qAnswered=false,quizMode='static',aiQuestions=[];
+function switchQuizMode(m){
+  quizMode=m;
+  ['Static','Alpha','AI'].forEach(x=>document.getElementById('t'+x).classList.remove('active'));
+  document.getElementById('t'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
+  qi=0;score=0;qAnswered=false;aiQuestions=[];
+  initQuiz();
+}
+function initQuiz(){
+  if(quizMode==='ai')renderAIStart();
+  else renderQ();
+}
+function renderAIStart(){
+  document.getElementById('quiz-area').innerHTML=`
+    <button class="gen-btn" id="genBtn" onclick="generateAIQuiz()">
+      <div id="genSpinner" style="display:none" class="spinner"></div>
+      ✨ Generate AI quiz (alphabet + French basics)
+    </button>
+    <div id="ai-quiz-content"></div>`;
+}
+async function generateAIQuiz(){
+  const btn=document.getElementById('genBtn');btn.disabled=true;
+  document.getElementById('genSpinner').style.display='block';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1400,messages:[{role:'user',content:`Generate 8 French beginner quiz questions. Mix: alphabet letter names/sounds, French vocabulary (with English), and simple phrases. Each question should be educational and bilingual where relevant.\n\nReturn ONLY valid JSON:\n{"questions":[{"type":"string","q":"question","hint":"short hint","opts":["A","B","C","D"],"ans":0}]}\n\nans is 0-indexed integer. No markdown, no explanation.`}]})});
+    const data=await res.json();
+    let raw=data.content.map(c=>c.text||'').join('').replace(/\`\`\`json|\`\`\`/g,'').trim();
+    aiQuestions=JSON.parse(raw).questions;
+    qi=0;score=0;qAnswered=false;renderAIQ();
+  }catch(e){document.getElementById('ai-quiz-content').innerHTML=`<div style="color:var(--red);padding:1rem;font-size:13px">Could not generate. Please try again.</div>`;btn.disabled=false;document.getElementById('genSpinner').style.display='none';}
+}
+function getQuestions(){return quizMode==='alpha'?alphaQuiz:quizMode==='ai'?aiQuestions:staticQuiz;}
+function renderQ(){const qs=getQuestions();if(qi>=qs.length){document.getElementById('quiz-area').innerHTML=buildResults(score,qs.length);return;}document.getElementById('quiz-area').innerHTML=buildQHTML(qs[qi],qi,qs.length,score);qAnswered=false;}
+function renderAIQ(){const qs=aiQuestions;if(qi>=qs.length){document.getElementById('ai-quiz-content').innerHTML=buildResults(score,qs.length);return;}document.getElementById('ai-quiz-content').innerHTML=buildQHTML(qs[qi],qi,qs.length,score);qAnswered=false;}
+function buildQHTML(q,idx,total,sc){
+  return`<div><div class="quiz-top"><span class="quiz-prog-txt">Question ${idx+1} of ${total}</span><span class="score-badge">Score: ${sc}</span></div>
+  <div class="qpb"><div class="qpf" style="width:${Math.round((idx/total)*100)}%"></div></div>
+  <div class="quiz-card">
+    <div class="q-type">${q.type||'Question'}</div>
+    <div class="q-text">${q.q}</div>
+    <div class="q-hint">${q.hint}</div>
+    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" id="opt${i}" onclick="pick(${i},${q.ans})">${o}</button>`).join('')}</div>
+    <div class="feedback" id="fb"></div>
+    <button class="next-btn" id="nxt" onclick="advanceQ()">Next →</button>
+  </div></div>`;
+}
+function advanceQ(){qi++;if(quizMode==='ai')renderAIQ();else renderQ();}
+function pick(i,ans){
+  if(qAnswered)return;qAnswered=true;
+  document.querySelectorAll('.opt').forEach(b=>b.classList.add('disabled'));
+  const fb=document.getElementById('fb');const nxt=document.getElementById('nxt');
+  const qs=getQuestions();
+  if(i===ans){score++;document.getElementById('opt'+i).classList.add('correct');fb.textContent='✓ Correct! Très bien !';fb.className='feedback show correct';}
+  else{document.getElementById('opt'+i).classList.add('wrong');document.getElementById('opt'+ans).classList.add('correct');fb.textContent=`✗ Correct answer: "${qs[qi].opts[ans]}"`;fb.className='feedback show wrong';}
+  nxt.classList.add('show');
+}
+function buildResults(sc,total){
+  const pct=Math.round((sc/total)*100);
+  const msg=pct>=80?'Excellent ! Vous êtes brillant(e) ! 🎉':pct>=60?'Bien fait ! Keep practicing! 👍':'Continuez à pratiquer — you\'ll get there! 💪';
+  return`<div class="quiz-card"><div class="rbox"><div class="rscore">${sc}/${total}</div><div class="rlabel">${pct}% correct</div><div class="rmsg">${msg}</div><button class="rbtn" onclick="qi=0;score=0;qAnswered=false;${quizMode==='ai'?'renderAIStart()':'renderQ()'}">Try again →</button></div></div>`;
+}
+
+// ── INIT ──
+buildAlphabet();
+</script>
+</body>
+</html>
